@@ -1,11 +1,10 @@
-from django.urls import path, include
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
+from django.urls import path
 from . import views
 
 urlpatterns = [
     path('', views.index, name='home'),
-    path('api/token/login', TokenObtainPairView.as_view()),
-    path('api/token/refresh', TokenRefreshView.as_view()),
-    path('api/auth/', include('djoser.urls')),
+    path('menu-items', views.MenuItemView.as_view(), name='menu'),
+    path('menu-items/<int:pk>', views.SingleMenuItemView.as_view(), name='menu-detail'),
+    path('bookings', views.BookingView.as_view(), name='bookings'),
+    path('bookings/<int:pk>', views.SingleBookingView.as_view(), name='booking-detail'),
 ]

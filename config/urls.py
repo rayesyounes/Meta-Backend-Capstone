@@ -16,13 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from restaurant import views
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,TokenRefreshView,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('restaurant/', include('restaurant.urls')),
-    path('menu-items', views.MenuItemView.as_view(), name='menu'),
-    path('menu-items/<int:pk>', views.SingleMenuItemView.as_view(), name='menu-detail'),
-    path('bookings', views.BookingView.as_view(), name='bookings'),
-    path('bookings/<int:pk>', views.SingleBookingView.as_view(), name='booking-detail'),
+    path('api/token/login/', TokenObtainPairView.as_view(), name='token-login'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
+    path('auth/', include('djoser.urls')),
 ]
