@@ -1,6 +1,4 @@
 from ..models import Booking, Menu
-
-from datetime import datetime, timedelta
 from random import randint
 import requests
 
