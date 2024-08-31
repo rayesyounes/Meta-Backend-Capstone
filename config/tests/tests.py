@@ -47,6 +47,40 @@ class SingleBookingViewTest(SetUpMixin, UserMixin, SingleBookingMixin, TestCase)
         self.create_booking()
         return super().setUp()
 
+    def test_retrieve(self):
+        response = self.client.get(reverse('api:booking-detail', kwargs={'pk': self.booking.pk}))
+        serializer = BookingSerializer(Booking.objects.get(pk=self.booking.pk))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, serializer.data)
+
+    def test_partial_update(self):
+        data = json.dumps({'no_of_guests': 6, 'booking_date': '2023-03-06'})
+        response = self.client.patch(
+            reverse('api:booking-detail', kwargs={'pk': self.booking.pk}),
+            data=data,
+            content_type='application/json',
+        )
+        serializer = BookingSerializer(Booking.objects.get(pk=self.booking.pk))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, serializer.data)
+
+    def test_update(self):
+        data = json.dumps({'name': 'will', 'no_of_guests': 6, 'booking_date': '2023-03-06'})
+        response = self.client.put(
+            reverse('api:booking-detail', kwargs={'pk': self.booking.pk}),
+            data = data,
+            content_type = 'application/json',
+        )
+        serializer = BookingSerializer(Booking.objects.get(pk=self.booking.pk))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, serializer.data)
+
+    def test_delete(self):
+        response = self.client.delete(reverse('api:booking-detail', kwargs={'pk': self.booking.pk}))
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.data, None)
+        self.assertEqual(Booking.objects.filter(pk=self.booking.pk).exists(), False)
+
 
 class MenuItemViewTest(SetUpMixin, UserMixin, MenuItemMixin, TestCase):
 
